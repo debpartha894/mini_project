@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity,Image } from 'react-native'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 const Profiletab = ({ navigation }) => {
+    const dispatch = useDispatch();
     return (
         <View style={{ backgroundColor: "white", flex: 1 }}>
             <View style={styles.profiletab}>
@@ -44,7 +46,7 @@ const Profiletab = ({ navigation }) => {
                     <View style={{ height: 1.2, width: 350, backgroundColor: 'lightgrey' }} />
                 </View>
 
-                <TouchableOpacity style={styles.section}>
+                <TouchableOpacity style={styles.section} onPress={()=>{dispatch({type: "LOG_OUT"})}}>
                     <Text style={styles.sectiontext} >Log Out</Text>
                 </TouchableOpacity>
             </View>

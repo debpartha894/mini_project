@@ -3,11 +3,13 @@ import HomeScreen from "./HomeScreen";
 import Curriculum from "./Curriculum";
 import ProfileScreen from "./ProfileScreen";
 import Ionicons from "../../node_modules/react-native-vector-icons/Ionicons"
+import { NavigationContainer } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
     return (
+      <NavigationContainer independent={true}>
         <Tab.Navigator
         screenOptions={{
           tabBarShowLabel: false,
@@ -38,6 +40,7 @@ const Tabs = () => {
             headerShown : false
           }}/>
         </Tab.Navigator>
+        </NavigationContainer>
     )
 }
 export default Tabs

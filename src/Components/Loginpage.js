@@ -1,44 +1,60 @@
-import { useEffect } from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { useEffect, useState, } from 'react'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
+import { login } from '../Actions/Actions';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 //import Loginpage from './src/Components/Loginpage'
 
-const Loginpage = ({mobile, password, setMobile, setPassword}) => {
-    useEffect(()=> {
-        const data = { username: 'example' };
-
-        fetch('https://example.com/profile', {
-            method: 'POST',
+const Loginpage = () => {
+    const showtoken = useSelector(state => state.usertoken)
+    const [mobileno, setMobileno] = useState(null);
+    const [password, setPassword] = useState(null);
+    const dispatch = useDispatch();
+    //let tokenvalue;
+    const login = async () => {
+        const phoneNumber = mobileno
+        let item = { phoneNumber, password }
+        let result = await fetch("https://staging-student-api.brightchamps.com/api/v1/master-login", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(item)
         })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    },[])
+        result = await result.json();
+        //tokenvalue = result.token;
+        dispatch({
+            type: "LOG_IN",
+            payload : {
+                usertoken : result.token
+            }
+        })
+    }
     return (
         <View style={styles.maincontainer}>
             <View style={styles.logincontainer}>
                 <Text style={styles.textstyle}>Master-Login</Text>
 
                 <View>
-                <TextInput
-                    style={styles.inputstyle} placeholder="Enter Mobile Number" placeholderTextColor="lightgrey"/>
-                <TextInput
-                    style={styles.inputstyle} placeholder = "Enter Password" placeholderTextColor="lightgrey"/>
+                    <TextInput
+                        style={styles.inputstyle} placeholder="Enter Mobile Number" placeholderTextColor="lightgrey"
+                        onChangeText={(text) => { setMobileno(text) }}
+                        value={mobileno} />
+                    <TextInput
+                        style={styles.inputstyle} placeholder="Enter Password" placeholderTextColor="lightgrey"
+                        onChangeText={(text) => { setPassword(text) }}
+                        value={password} />
                 </View>
-                
-                <TouchableOpacity style = {styles.loginbutton}>
+
+                <TouchableOpacity style={styles.loginbutton} onPress={() => login()}>
                     <Text style={{
-                        color : "white",
+                        color: "white",
                         fontSize: 18,
-                        fontWeight: "bold"}}>Login</Text>
+                        fontWeight: "bold"
+                    }}>Login</Text>
                 </TouchableOpacity>
 
             </View>
@@ -63,13 +79,13 @@ const styles = StyleSheet.create({
         elevation: 10,
         justifyContent: "space-around",
         alignItems: "center",
-        
+
     },
     textstyle: {
         color: "black",
         fontSize: 20,
         fontWeight: "bold",
-        
+
     },
     inputstyle: {
         borderColor: "lightgrey",
@@ -79,16 +95,16 @@ const styles = StyleSheet.create({
         color: "black",
         width: 315,
         fontSize: 15,
-        paddingHorizontal : 15,
+        paddingHorizontal: 15,
         letterSpacing: 0.6,
-        fontWeight : "500"
+        fontWeight: "500"
     },
-    loginbutton : {
+    loginbutton: {
         backgroundColor: "blue",
         width: 300,
         height: 45,
-        borderRadius: 10, 
-        alignItems : "center",
+        borderRadius: 10,
+        alignItems: "center",
         justifyContent: "center"
     }
 })
