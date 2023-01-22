@@ -8,12 +8,10 @@ import { useSelector } from 'react-redux'
 
 const RootNavigation = () => {
   const token = useSelector((state) => state.usertoken)
-  console.log(token)
-  let show = true;
-  if(token != null) show=false;
-  console.log(show)
-  if(show) return <Loginpage/>
-  else return <Tabs/>
+  let showhomepage = false;
+  if(token != null && token!= undefined) showhomepage=true;
+  if(showhomepage) return <Tabs/>
+  else return <Loginpage/>
 }
 
 export default RootNavigation

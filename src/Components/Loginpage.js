@@ -1,20 +1,26 @@
 import { useEffect, useState, } from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
-import { login } from '../Actions/Actions';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-
-//import Loginpage from './src/Components/Loginpage'
+import Loadingscreen from './Loadingscreen';
 
 const Loginpage = () => {
-    const showtoken = useSelector(state => state.usertoken)
-    const [mobileno, setMobileno] = useState(null);
+
+    // local and global state declaration and definition 
+    const [isloading, setloading] = useState(false);
+    const [phoneNumber, setphoneNumber] = useState(null);
     const [password, setPassword] = useState(null);
+
+    //dispatch function
     const dispatch = useDispatch();
-    //let tokenvalue;
+    
+    // on clicking login button
     const login = async () => {
-        const phoneNumber = mobileno
+        if(phoneNumber != null && password !=null){
+            setloading(true);
+        }
+
         let item = { phoneNumber, password }
         let result = await fetch("https://staging-student-api.brightchamps.com/api/v1/master-login", {
             method: "POST",
@@ -24,16 +30,27 @@ const Loginpage = () => {
             },
             body: JSON.stringify(item)
         })
+
         result = await result.json();
-        //tokenvalue = result.token;
+        //console.log(result)
         dispatch({
             type: "LOG_IN",
-            payload : {
-                usertoken : result.token
-            }
+            payload : result.token,
         })
+        
+        if(result.token == null || result.token == undefined) {
+            setloading(false)
+            setphoneNumber(null)
+            setPassword(null)
+        }
     }
-    return (
+    
+    
+
+    
+    //Return portion
+    if(isloading) return <Loadingscreen/>
+    else return (
         <View style={styles.maincontainer}>
             <View style={styles.logincontainer}>
                 <Text style={styles.textstyle}>Master-Login</Text>
@@ -41,12 +58,12 @@ const Loginpage = () => {
                 <View>
                     <TextInput
                         style={styles.inputstyle} placeholder="Enter Mobile Number" placeholderTextColor="lightgrey"
-                        onChangeText={(text) => { setMobileno(text) }}
-                        value={mobileno} />
+                        onChangeText={(text) => { setphoneNumber(text) }}
+                        value={phoneNumber} />
                     <TextInput
                         style={styles.inputstyle} placeholder="Enter Password" placeholderTextColor="lightgrey"
                         onChangeText={(text) => { setPassword(text) }}
-                        value={password} />
+                        value={password} secureTextEntry={true}/>
                 </View>
 
                 <TouchableOpacity style={styles.loginbutton} onPress={() => login()}>

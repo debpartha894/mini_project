@@ -1,5 +1,10 @@
 const initialstate = {
     usertoken: null,
+    user_name : "",
+    class_date : "",
+    class_slot : "",
+    plans : [],
+    timezone : ""
 }
 
 const changeloginstate = (state = initialstate, action) => {
@@ -12,10 +17,29 @@ const changeloginstate = (state = initialstate, action) => {
         case "LOG_OUT":
             return {
                 ...state,
-                usertoken: null
+                usertoken: null,
+            }
+        case "LOADED_HOME": 
+            return {
+                ...state,
+                user_name : action.payload.username,
+                timezone : action.payload.timezone
+
+            }
+        case "CLASS_DETAILS" :
+            return {
+                ...state,
+                class_date : action.payload.day,
+                class_slot : action.payload.time
+            }
+        case "PLAN_DETAILS" : 
+            return {
+                ...state,
+                plans : action.payload
             }
         default :
         return state
     }
 }
+
 export default changeloginstate;
