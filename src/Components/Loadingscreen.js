@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { classdetailsloading, homeloading, plandetailsloading } from '../apis/api';
 
 const Loadingscreen = () => {
-    return (
+    //const dispatch = useDispatch();
+    const classdate = useSelector(state => state.class_date)
+    return ( !classdate && (
         <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" />
         </View>
+    )
     )
 };
 

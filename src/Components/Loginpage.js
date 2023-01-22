@@ -4,6 +4,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import Loadingscreen from './Loadingscreen';
+import { classdetailsloading, homeloading, plandetailsloading } from '../apis/api';
 
 const Loginpage = () => {
 
@@ -44,9 +45,6 @@ const Loginpage = () => {
             setPassword(null)
         }
     }
-    
-    
-
     
     //Return portion
     if(isloading) return <Loadingscreen/>

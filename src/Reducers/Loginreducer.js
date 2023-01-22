@@ -16,7 +16,7 @@ const changeloginstate = (state = initialstate, action) => {
             }
         case "LOG_OUT":
             return {
-                ...state,
+                user_name : null,
                 usertoken: null,
             }
         case "LOADED_HOME": 
